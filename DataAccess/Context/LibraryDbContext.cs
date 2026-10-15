@@ -8,6 +8,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/* Steps to create a migration class (which is needed to create/update the database)
+ * 
+ * 1. See that you have no errors after compilation
+ * 2. Make the website as the Startup project
+ * 3. Open Package Manager console
+ * 4. Set the Default Project to where the context class is within the Package Manager Console window
+ * 5. type: add-migration "InitialMigration" -context [press tab] LibraryDbContext
+ * 6. Hit Enter
+ * 7. you check your generated Migration class, which is created in DataAccess > Migrations
+ * 8. type: update-database -context [press tab] LibraryDbContext
+ * 
+ * note: if you need to update the database because you decided to add a new property, then you have to 
+ *       re-execute from step 5 onwards after building and checked that there are no errors
+ */ 
+
+
+
+
+
+
 namespace DataAccess.Context
 {
     //IdentityDbContext is a built-in context class containing
