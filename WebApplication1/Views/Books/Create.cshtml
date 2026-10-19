@@ -1,0 +1,62 @@
+﻿@model Common.Models.Book // page directive to model the page on the Book class
+                          <!--book class is helpful to write C# code to interface with it -->
+
+@{  //this will be displayed in the tab of the browser
+    ViewData["Title"] = "Create Book";
+}
+
+<h2>Create Book</h2>
+
+<form action="Create" method="post">
+
+    <div class="mb-3">
+        <label class="form-label">Isbn</label>
+        <input asp-for="Isbn" class="form-control" />
+        <span asp-validation-for="Isbn" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Author" class="form-label"></label>
+        <input asp-for="Author" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Volume" class="form-label"></label>
+        <input asp-for="Volume" type="number" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CategoryFK" class="form-label">Category</label>
+        <select asp-for="CategoryFK"
+                asp-items="ViewBag.Categories"
+                class="form-select">
+            <option value="">Select Category</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description"
+                  class="form-control"
+                  rows="4"></textarea>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="Available" class="form-check-input" />
+        <label asp-for="Available" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Book</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

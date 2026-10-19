@@ -26,12 +26,14 @@ namespace DataAccess.Repositories
             _context = context;
         }
 
+        //IQueryable - it defers the execution of the sql statement stored inside using LINQ
+        //             ...until it meets a ToList() or we render the page
         public IQueryable<Book> GetBooks()
         {
             //var list = from b in _context.Books
             //           select b; return list;
 
-            return _context.Books;
+            return _context.Books; //Select * From Books Where Title like '%@keyword%'
         }
 
         public IQueryable<Book> GetBooks(string keyword)
@@ -40,12 +42,14 @@ namespace DataAccess.Repositories
             //           select b;
             //           return list;
 
+                   //1st call               //2nd call to get the same list
             return GetBooks().Where(b => b.Title.Contains(keyword));
         }
 
         public void AddBook(Book b)
         {
-            
+            _context.Books.Add(b); //it adds b to the object _context...which is an abstraction of the db
+            _context.SaveChanges();
         }
 
     }
