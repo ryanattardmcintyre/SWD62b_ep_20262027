@@ -1,4 +1,5 @@
 using DataAccess.Context;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -14,6 +15,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<LibraryDbContext>();
 builder.Services.AddControllersWithViews();
+
+//Scoped => it creates one instance per request
+//           e.g. user => /Books/Create => 1) checking whether book exists 2) to add the book
+//Transient => it creates one instance per call
+//Singleton => it creates one instance for all users
+
+builder.Services.AddScoped<BooksRepository>();
+builder.Services.AddScoped<CategoriesRepository>();
+
 
 var app = builder.Build();
 

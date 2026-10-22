@@ -19,8 +19,11 @@ namespace WebApplication1.Controllers
     public class BooksController : Controller
     {
         private BooksRepository _booksRepository;
-        public BooksController(BooksRepository booksRepository) { 
-        
+        private CategoriesRepository _categoriesRepository;
+        public BooksController(BooksRepository booksRepository,
+                                CategoriesRepository categoryRepository) {
+            
+            _categoriesRepository = categoryRepository;
             _booksRepository = booksRepository;
         }
 
@@ -39,16 +42,38 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+          var categories = _categoriesRepository.GetCategories();
+            //TempData["categories"] = categories;
+            ViewBag.Categories = categories;
+
             return View();
         }
 
         [HttpPost]
         public IActionResult Create(Book b)
         {
-            _booksRepository.AddBook(b);
+            try
+            {
+                if (_booksRepository.GetBooks().SingleOrDefault(x => x.Isbn == b.Isbn) == null)
+                {
+                    _booksRepository.AddBook(b);
+                    TempData["message"] = "Book was added successfully"; //ViewBag.Message = ....
+                }else
+                {
+                    TempData["error"] = "Error: book already exists in the database";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = "Book was not input, check your inputs";
+            }
+
+            var categories = _categoriesRepository.GetCategories();
+            ViewBag.Categories = categories;
+
             return View(); //redirects the user to the same page of origin i.e. back to same page
                            //option 2: redirect the user to a different page or method
-                                       //RedirectToAction("Index");
+                           //RedirectToAction("Index");
         }
 
     }

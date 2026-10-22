@@ -7,11 +7,11 @@
 
 <h2>Create Book</h2>
 
-<form action="Create" method="post">
+<form action="/Books/Create" method="post">
 
     <div class="mb-3">
         <label class="form-label">Isbn</label>
-        <input asp-for="Isbn" class="form-control" />
+        <input name="Isbn" class="form-control" />
         <span asp-validation-for="Isbn" class="text-danger"></span>
     </div>
 
@@ -33,10 +33,19 @@
 
     <div class="mb-3">
         <label asp-for="CategoryFK" class="form-label">Category</label>
-        <select asp-for="CategoryFK"
-                asp-items="ViewBag.Categories"
+        <select name="CategoryFK"
                 class="form-select">
             <option value="">Select Category</option>
+            @try{
+                    foreach(Common.Models.Category c in ViewBag.Categories)
+                    {
+                    <option value="@c.Id">@c.Name</option>
+                    }
+            }
+            catch
+            {
+                
+            }
         </select>
     </div>
 
