@@ -28,6 +28,23 @@ namespace WebApplication1.Controllers
         }
 
 
+        public IActionResult Index()
+        {
+            var list = _booksRepository.GetBooks();
+            return View(list);
+        }
+
+        public IActionResult Search(string keyword)
+        {
+            var list = _booksRepository.GetBooks(keyword);
+            return View("Index", list); //we want to redirect the user to the Index page instead
+                                        //NOT the search page
+        }
+
+
+
+
+
 
         //Functionality 1: Adding a book
         //[Get] step 1: user gets an empty page where to fill in details
@@ -58,6 +75,10 @@ namespace WebApplication1.Controllers
                 {
                     _booksRepository.AddBook(b);
                     TempData["message"] = "Book was added successfully"; //ViewBag.Message = ....
+
+                    ModelState.Clear();
+
+
                 }else
                 {
                     TempData["error"] = "Error: book already exists in the database";

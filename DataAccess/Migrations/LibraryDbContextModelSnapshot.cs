@@ -38,6 +38,9 @@ namespace DataAccess.Migrations
                     b.Property<int>("CategoryFK")
                         .HasColumnType("int");
 
+                    b.Property<string>("Cover")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

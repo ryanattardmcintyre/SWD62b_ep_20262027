@@ -21,7 +21,7 @@ namespace Common.Models
 
         [ForeignKey("Category")] //<= you specify the name of the corresponding nav. prop.
         public int CategoryFK { get; set; } //foreign key
-        public Category Category { get; set; } //navigational property
+        public virtual Category Category { get; set; } //navigational property
 
         //from mydb.Books in b
         //select b;
@@ -33,6 +33,8 @@ namespace Common.Models
 
         public string Description { get; set; }
         public bool Available { get; set; }
+
+        public string? Cover { get; set; }
 
     }
 }

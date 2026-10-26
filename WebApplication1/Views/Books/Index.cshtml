@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Common.Models.Book>
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Book Collection</h2>
+    </div>
+
+    <div class="row g-4">
+
+        @foreach (Common.Models.Book b in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+
+                    <!-- Book Cover -->
+                    @if (!string.IsNullOrEmpty(b.Cover))
+                    {
+                        <img src="@b.Cover"
+                             class="card-img-top"
+                             alt="Cover of @b.Title"
+                             style="height: 250px; object-fit: contain; padding: 15px;" />
+                    }
+                    else
+                    {
+                        <div class="bg-light d-flex align-items-center justify-content-center"
+                             style="height: 250px;">
+                            <span class="text-muted">No Cover Available</span>
+                        </div>
+                    }
+
+                    <div class="card-body d-flex flex-column">
+
+                        <!-- Title -->
+                        <h5 class="card-title">@b.Title</h5>
+
+                        <!-- Author -->
+                        <h6 class="card-subtitle mb-3 text-muted">
+                            by @b.Author
+                        </h6>
+
+                        <!-- Book Details -->
+                        <p class="card-text mb-1">
+                            <strong>ISBN:</strong> @b.Isbn
+                        </p>
+
+                        <p class="card-text mb-1">
+                            <strong>Category:</strong>
+                            @(b.Category?.Name ?? "N/A")
+                        </p>
+
+                        <p class="card-text mb-1">
+                            <strong>Volume:</strong> @b.Volume
+                        </p>
+
+                    
+                    
+
+                        <!-- Availability -->
+                        <div class="mt-auto pt-3">
+
+                            @if (b.Available)
+                            {
+                                <span class="badge bg-success">
+                                    Available
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    Unavailable
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -46,5 +46,13 @@ namespace DataAccess.Context
         //In a context class you may define additional/optional stuff
         //such as lazy loading, to apply an additional constraint,
         //to generate automatically a guid F3179A8B-CD2F-41D8-8158-34306C69255D and store it in specific fields upon creation/update
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //applying LazyLoading to activate the use of Navigational Properties
+            //e.g. Category because without it you will get NULL
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
     }
 }
