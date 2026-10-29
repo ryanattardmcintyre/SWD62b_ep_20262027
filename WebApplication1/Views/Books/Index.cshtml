@@ -10,12 +10,29 @@
         <h2>Book Collection</h2>
     </div>
 
+    <div>
+        <form method="post" action="/Books/Search">
+            Search: <input type="text" name="keyword" class="form-control" placeholder="type name of book" />
+
+            <input type="submit" value="Search" class="btn btn-success" />
+        </form>
+    </div>
+
+
+    <div>  <a href="/Books/Index?lastIndexOf=@TempData["counter"]&q=previous"> &lt; Prev </a>
+        &nbsp;&nbsp;
+        <a href="/Books/Index?lastIndexOf=@TempData["counter"]&q=next" > &gt; Next </a>
+    </div>
+
+
     <div class="row g-4">
 
         @foreach (Common.Models.Book b in Model)
         {
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm">
+
+                    
 
                     <!-- Book Cover -->
                     @if (!string.IsNullOrEmpty(b.Cover))
@@ -78,8 +95,9 @@
 
                         </div>
 
+                       
                     </div>
-
+                    <a href="/Books/Details/@b.Isbn" role="button" class="btn btn-outline-warning">Details</a>
                 </div>
             </div>
         }

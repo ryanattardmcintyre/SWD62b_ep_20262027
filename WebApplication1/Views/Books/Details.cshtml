@@ -1,0 +1,480 @@
+﻿@model Common.Models.Book
+
+@{
+    ViewData["Title"] = Model.Title;
+
+    var coverUrl = !string.IsNullOrWhiteSpace(Model.Cover)
+        ? Model.Cover
+        : "https://placehold.co/500x750/202d35/d6b77d?text=No+Cover";
+
+    var categoryName = Model.Category?.Name ?? "Uncategorised";
+}
+
+<style>
+    body {
+        background: #10141a;
+        color: #f4f0e8;
+    }
+
+    .vault {
+        font-family: 'Segoe UI', sans-serif;
+        max-width: 1400px;
+        margin: auto;
+        padding: 35px 20px 100px;
+    }
+
+    .vault-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #343942;
+        padding-bottom: 25px;
+    }
+
+    .vault-brand {
+        color: #d6b77d;
+        font-size: 12px;
+        letter-spacing: 4px;
+        font-weight: bold;
+    }
+
+    .back-link {
+        color: #d8d5ce;
+        text-decoration: none;
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+        .back-link:hover {
+            color: #d6b77d;
+        }
+
+    .hero {
+        min-height: 630px;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+        gap: 60px;
+        position: relative;
+    }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: #c7a76a;
+            filter: blur(220px);
+            opacity: .10;
+            right: 5%;
+            pointer-events: none;
+        }
+
+    .eyebrow {
+        color: #d6b77d;
+        font-size: 12px;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        margin-bottom: 30px;
+    }
+
+    .book-title {
+        font-family: Georgia, serif;
+        font-size: clamp(52px, 6vw, 105px);
+        line-height: 1.02;
+        letter-spacing: -3px;
+        margin-bottom: 35px;
+        overflow-wrap: anywhere;
+    }
+
+        .book-title em {
+            color: #d6b77d;
+            font-weight: normal;
+        }
+
+    .author-line {
+        font-size: 15px;
+        color: #a8aab0;
+        letter-spacing: 2px;
+        margin-bottom: 35px;
+    }
+
+        .author-line strong {
+            color: #fff;
+            font-weight: 400;
+        }
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        border: 1px solid #496957;
+        border-radius: 50px;
+        color: #a9e2ba;
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+
+        .status.unavailable {
+            color: #e5a8a8;
+            border-color: #885151;
+        }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 15px currentColor;
+    }
+
+    .book-stage {
+        perspective: 1200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 510px;
+    }
+
+    .book-3d {
+        width: min(290px, 75%);
+        aspect-ratio: 2 / 3;
+        position: relative;
+        transform: rotateY(-18deg) rotateZ(3deg);
+        transform-style: preserve-3d;
+        transition: transform .6s ease;
+        box-shadow: 25px 35px 65px #0009;
+    }
+
+        .book-3d:hover {
+            transform: rotateY(0deg) rotateZ(0deg) translateY(-15px);
+        }
+
+        .book-3d img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 2px 8px 8px 2px;
+            display: block;
+        }
+
+        .book-3d::before {
+            content: "";
+            position: absolute;
+            left: -19px;
+            top: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, #151b20, #57616a);
+            transform: rotateY(-90deg);
+            transform-origin: right;
+        }
+
+        .book-3d::after {
+            content: "";
+            position: absolute;
+            bottom: -35px;
+            left: 10%;
+            width: 90%;
+            height: 20px;
+            background: #000;
+            filter: blur(22px);
+            opacity: .8;
+        }
+
+    .metadata {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid #353a42;
+        border-bottom: 1px solid #353a42;
+        padding: 35px 0;
+        gap: 25px;
+    }
+
+    .meta-label {
+        font-size: 11px;
+        color: #a6a8ad;
+        letter-spacing: 3px;
+        margin-bottom: 12px;
+    }
+
+    .meta-value {
+        font-family: Georgia, serif;
+        font-size: 22px;
+        color: #f4f0e8;
+        overflow-wrap: anywhere;
+    }
+
+    .story-section {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 70px;
+        padding: 100px 0;
+    }
+
+    .story-heading {
+        font-family: Georgia, serif;
+        font-size: 48px;
+        line-height: 1.1;
+    }
+
+        .story-heading span {
+            color: #d6b77d;
+            font-style: italic;
+        }
+
+    .story-text {
+        color: #c1c2c5;
+        font-size: 18px;
+        line-height: 2;
+        white-space: pre-line;
+        overflow-wrap: anywhere;
+    }
+
+    .quote-mark {
+        font-family: Georgia, serif;
+        font-size: 100px;
+        line-height: .6;
+        color: #d6b77d;
+        opacity: .45;
+        margin-bottom: 20px;
+    }
+
+    .footer-panel {
+        background: #1b222b;
+        padding: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        border: 1px solid #303944;
+    }
+
+        .footer-panel h3 {
+            font-family: Georgia, serif;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .footer-panel p {
+            color: #a9adb4;
+            margin: 0;
+        }
+
+    .vault-button {
+        display: inline-block;
+        background: #d6b77d;
+        color: #17191d;
+        text-decoration: none;
+        padding: 17px 28px;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        transition: .3s;
+        white-space: nowrap;
+    }
+
+        .vault-button:hover {
+            background: #fff;
+            color: #17191d;
+            transform: translateY(-3px);
+        }
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(35px);
+        transition: opacity .8s ease, transform .8s ease;
+    }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    @@media (max-width: 800px) {
+        .hero {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding-top: 60px;
+        }
+
+        .book-title {
+            font-size: 54px;
+        }
+
+        .book-stage {
+            min-height: 440px;
+        }
+
+        .metadata {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .story-section {
+            grid-template-columns: 1fr;
+            gap: 30px;
+            padding: 65px 0;
+        }
+
+        .footer-panel {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    @@media (prefers-reduced-motion: reduce) {
+        .reveal {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+
+        .book-3d, .vault-button {
+            transition: none;
+        }
+    }
+</style>
+
+<div class="vault">
+
+    <!-- NAVIGATION -->
+    <div class="vault-nav">
+        <div class="vault-brand">
+            THE LITERARY VAULT.
+        </div>
+
+        <a asp-action="Index" class="back-link">
+            ← RETURN TO COLLECTION
+        </a>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                The Collection / Volume @Model.Volume
+            </div>
+
+            <h1 class="book-title">
+                <em>@Model.Title</em>
+            </h1>
+
+            <div class="author-line">
+                WRITTEN BY <strong>@Model.Author</strong>
+            </div>
+
+            <div class="status @(Model.Available ? "" : "unavailable")">
+                <span class="status-dot"></span>
+
+                @(Model.Available
+                                ? "AVAILABLE IN COLLECTION"
+                                : "CURRENTLY UNAVAILABLE")
+            </div>
+
+        </div>
+
+        <!-- 3D BOOK COVER -->
+        <div class="book-stage">
+            <div class="book-3d">
+                <img src="@coverUrl"
+                     alt="Cover of @Model.Title"
+                     onerror="this.onerror=null;this.src='https://placehold.co/500x750/202d35/d6b77d?text=No+Cover';" />
+            </div>
+        </div>
+
+    </section>
+
+    <!-- BOOK METADATA -->
+    <section class="metadata reveal">
+
+        <div>
+            <div class="meta-label">THE AUTHOR</div>
+            <div class="meta-value">@Model.Author</div>
+        </div>
+
+        <div>
+            <div class="meta-label">CATEGORY</div>
+            <div class="meta-value">@categoryName</div>
+        </div>
+
+        <div>
+            <div class="meta-label">VOLUME</div>
+            <div class="meta-value">
+                @Model.Volume.ToString("D2")
+            </div>
+        </div>
+
+        <div>
+            <div class="meta-label">IDENTIFICATION / ISBN</div>
+            <div class="meta-value">@Model.Isbn</div>
+        </div>
+
+    </section>
+
+    <!-- DESCRIPTION -->
+    <section class="story-section reveal">
+
+        <div>
+            <div class="eyebrow">Discover the narrative</div>
+
+            <h2 class="story-heading">
+                Between<br />
+                the <span>pages.</span>
+            </h2>
+        </div>
+
+        <div>
+            <div class="quote-mark">“</div>
+
+            <div class="story-text">
+                @(string.IsNullOrWhiteSpace(Model.Description)
+                                ? "Every book holds a universe waiting to be explored."
+                                : Model.Description)
+            </div>
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <section class="footer-panel reveal">
+
+        <div>
+            <h3>The story doesn't end here.</h3>
+            <p>Continue exploring the literary collection.</p>
+        </div>
+
+        <a asp-action="Index" class="vault-button">
+            EXPLORE MORE BOOKS ↗
+        </a>
+
+    </section>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const elements = document.querySelectorAll(".reveal");
+
+        if (!("IntersectionObserver" in window)) {
+            elements.forEach(el => el.classList.add("visible"));
+            return;
+        }
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        elements.forEach(el => observer.observe(el));
+    });
+</script>

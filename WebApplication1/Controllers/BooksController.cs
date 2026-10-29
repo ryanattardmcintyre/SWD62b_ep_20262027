@@ -28,9 +28,48 @@ namespace WebApplication1.Controllers
         }
 
 
-        public IActionResult Index()
+        public IActionResult Details(string id)
         {
-            var list = _booksRepository.GetBooks();
+            var book = _booksRepository.GetBooks().SingleOrDefault(x => x.Isbn == id);
+            if (book == null)
+            {
+                TempData["error"] = "Book doesn't exist";
+                return RedirectToAction("Index"); //Books/Index
+            }
+            else
+            {
+                return View(book);
+            }
+
+
+        }
+
+
+        public IActionResult Index(int lastIndexOf=0, string q="next")
+        {
+            var NoOfBooksInDb = _booksRepository.GetBooks().Count();
+
+            IQueryable<Book> list;
+            if (q != "next") //previous
+            {
+                if (lastIndexOf - 10 >= 0)
+                {   //26 - 20 = 06 -> 16 (lastIndexOf)
+                    int num = (lastIndexOf - (10 * 2) <0 ? 0: lastIndexOf - (10 * 2));
+                    
+                    list = _booksRepository.GetBooks().Skip(num).Take(10);
+                    TempData["counter"] = (num + 9);
+                }
+                else
+                {
+                    list = _booksRepository.GetBooks().Skip(0).Take(10);
+                    TempData["counter"] = 9;
+                }
+            }
+            else //next
+            {
+                    list = _booksRepository.GetBooks().Skip(lastIndexOf).Take(10);
+                TempData["counter"] = lastIndexOf + 9;
+            }
             return View(list);
         }
 
