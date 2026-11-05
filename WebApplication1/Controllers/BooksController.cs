@@ -106,12 +106,35 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Book b)
+        //IWebHostEnvironment is the framework service we need to obtain dynamically the absolute Path where
+        //we will be saving our files; it is being injected only into this method using Method-Injection
+        public IActionResult Create(Book b, IFormFile file, [FromServices]IWebHostEnvironment host)
         {
             try
             {
                 if (_booksRepository.GetBooks().SingleOrDefault(x => x.Isbn == b.Isbn) == null)
                 {
+                    if (file != null)
+                    {
+                        //file is uploaded on the web server
+                        //1. filename issue
+                        string filename = b.Isbn + Path.GetExtension(file.FileName);
+
+                        //2. where we are going to save the file on disk?
+                        string absolutePath = host.WebRootPath + "\\images\\" + filename;
+
+                        using (var fs = new FileStream(absolutePath, FileMode.CreateNew))
+                        {
+                            file.CopyTo(fs);
+                        }
+
+                        //3. saving the relative path into the db
+                        //absolutePaths are used for saving the file on disk
+                        //relativePaths are used to be able to render the image in an <img> control
+                        b.Cover = "\\images\\" + filename;
+
+                    }
+                    //saving the generated path into the instance b to be saved into the db
                     _booksRepository.AddBook(b);
                     TempData["message"] = "Book was added successfully"; //ViewBag.Message = ....
 
@@ -135,6 +158,78 @@ namespace WebApplication1.Controllers
                            //option 2: redirect the user to a different page or method
                            //RedirectToAction("Index");
         }
+
+
+
+
+        [HttpGet]
+        public IActionResult Edit(string id) 
+        {
+            var originalBook = _booksRepository.GetBooks().SingleOrDefault(x => x.Isbn == id);
+            if(originalBook == null)
+            {
+                TempData["error"] = "Book doesn't exist";
+                return RedirectToAction("Index");
+
+            }
+            var categories = _categoriesRepository.GetCategories();
+            ViewBag.Categories = categories;
+            return View(originalBook);
+        
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Book b, IFormFile file, [FromServices] IWebHostEnvironment host)
+        {
+            try
+            {
+                if (_booksRepository.GetBooks().SingleOrDefault(x => x.Isbn == b.Isbn) != null)
+                {
+                    if (file != null)
+                    {
+                        //file is uploaded on the web server
+                        //1. filename issue
+                        string filename = b.Isbn + Path.GetExtension(file.FileName);
+
+                        //2. where we are going to save the file on disk?
+                        string absolutePath = host.WebRootPath + "\\images\\" + filename;
+
+                        using (var fs = new FileStream(absolutePath, FileMode.CreateNew))
+                        {
+                            file.CopyTo(fs);
+                        }
+
+                        //3. saving the relative path into the db
+                        //absolutePaths are used for saving the file on disk
+                        //relativePaths are used to be able to render the image in an <img> control
+                        b.Cover = "\\images\\" + filename;
+
+                    }
+                    //saving the generated path into the instance b to be saved into the db
+                    _booksRepository.AddBook(b);
+                    TempData["message"] = "Book was updated successfully"; //ViewBag.Message = ....
+
+                    ModelState.Clear();
+
+
+                }
+                else
+                {
+                    TempData["error"] = "Error: book doesn't exist in the database";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = "Book was not input, check your inputs";
+            }
+
+            
+            return RedirectToAction("Index");
+        }
+
+
+
+
 
     }
 }

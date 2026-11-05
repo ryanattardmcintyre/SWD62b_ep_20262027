@@ -52,6 +52,30 @@ namespace DataAccess.Repositories
             _context.SaveChanges();
         }
 
+        public void UpdateBook(Book b)
+        {
+            var originalBook = GetBooks().SingleOrDefault(x => x.Isbn == b.Isbn);
+            originalBook.Cover = b.Cover;
+            originalBook.Title = b.Title;
+            //...
+
+            _context.SaveChanges();
+        }
+
+        public void DeleteBook(string isbn)
+        {
+            var originalBook = GetBooks().SingleOrDefault(x => x.Isbn == isbn);
+            if(originalBook != null)
+            {
+                _context.Books.Remove(originalBook);
+                _context.SaveChanges(); //with every write operation
+                                        //(if you want to persist changes)
+                                        //SaveChanges() must be called
+            }
+        }
+
+
+
 
        
     }

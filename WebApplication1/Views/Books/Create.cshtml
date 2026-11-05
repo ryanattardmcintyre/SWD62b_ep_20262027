@@ -7,7 +7,7 @@
 
 <h2>Create Book</h2>
 
-<form action="/Books/Create" method="post">
+<form action="/Books/Create" method="post" enctype="multipart/form-data">
 
     <div class="mb-3">
         <label class="form-label">Isbn</label>
@@ -60,6 +60,12 @@
         <input asp-for="Available" class="form-check-input" />
         <label asp-for="Available" class="form-check-label"></label>
     </div>
+
+    <div class="form-check mb-3">
+        <input class="form-control" type="file" name="file" />
+    </div>
+
+
 
     <button type="submit" class="btn btn-primary">Save Book</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
