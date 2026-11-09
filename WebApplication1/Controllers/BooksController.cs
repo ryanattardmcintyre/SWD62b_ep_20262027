@@ -173,7 +173,7 @@ namespace WebApplication1.Controllers
 
             }
             var categories = _categoriesRepository.GetCategories();
-            ViewBag.Categories = categories;
+            ViewBag.Categories = categories.ToList();
             return View(originalBook);
         
         }
@@ -194,6 +194,9 @@ namespace WebApplication1.Controllers
                         //2. where we are going to save the file on disk?
                         string absolutePath = host.WebRootPath + "\\images\\" + filename;
 
+                        if (System.IO.File.Exists(absolutePath)) { System.IO.File.Delete(absolutePath); }
+
+
                         using (var fs = new FileStream(absolutePath, FileMode.CreateNew))
                         {
                             file.CopyTo(fs);
@@ -206,7 +209,7 @@ namespace WebApplication1.Controllers
 
                     }
                     //saving the generated path into the instance b to be saved into the db
-                    _booksRepository.AddBook(b);
+                    _booksRepository.UpdateBook(b);
                     TempData["message"] = "Book was updated successfully"; //ViewBag.Message = ....
 
                     ModelState.Clear();
@@ -228,7 +231,13 @@ namespace WebApplication1.Controllers
         }
 
 
-
+        [HttpGet]
+        public IActionResult Delete(string id)
+        {
+            _booksRepository.DeleteBook(id);
+            TempData["message"] = "Book deleted";
+            return RedirectToAction("Index");
+        }
 
 
     }

@@ -97,7 +97,11 @@
 
                        
                     </div>
-                    <a href="/Books/Details/@b.Isbn" role="button" class="btn btn-outline-warning">Details</a>
+                    <div class="d-flex gap-2">
+                        <a href="/Books/Details/@b.Isbn" class="btn btn-outline-warning">Details</a>
+                        <a href="/Books/Edit/@b.Isbn" class="btn btn-outline-info">Edit</a>
+                        <a href="/Books/Delete/@b.Isbn" onclick="return window.confirm('Are you sure?')" class="btn btn-danger">Delete</a>
+                    </div>
                 </div>
             </div>
         }
@@ -105,3 +109,4 @@
     </div>
 
 </div>
+

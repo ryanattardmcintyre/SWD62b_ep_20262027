@@ -34,7 +34,7 @@ namespace DataAccess.Context
     //tables which will automatically manage user data
 
     //In other words the LibraryDbContext class is an abstraction of the database
-    public class LibraryDbContext: IdentityDbContext<IdentityUser>
+    public class LibraryDbContext: IdentityDbContext<CustomUser>
     {
         public LibraryDbContext(DbContextOptions<LibraryDbContext> options)
             : base(options) { }
