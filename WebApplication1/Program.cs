@@ -1,3 +1,4 @@
+using Common.Interfaces;
 using Common.Models;
 using DataAccess.Context;
 using DataAccess.Repositories;
@@ -22,7 +23,19 @@ builder.Services.AddControllersWithViews();
 //Transient => it creates one instance per call
 //Singleton => it creates one instance for all users
 
-builder.Services.AddScoped<BooksRepository>();
+string dataSource = builder.Configuration["dataSource"].ToString();
+string jsonPath = builder.Configuration["jsonPath"].ToString();
+if (dataSource == "db")
+{
+    builder.Services.AddScoped<IBooksRepository, BooksRepository>();
+}
+else
+{
+    builder.Services.AddScoped<IBooksRepository, BooksJsonRepository>
+        (x=> new BooksJsonRepository(jsonPath));
+}
+
+    
 builder.Services.AddScoped<CategoriesRepository>();
 
 

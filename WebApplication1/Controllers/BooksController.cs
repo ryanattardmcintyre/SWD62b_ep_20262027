@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Common.Models;
 using DataAccess.Repositories;
+using Common.Interfaces;
 namespace WebApplication1.Controllers
 {
 
@@ -18,9 +19,9 @@ namespace WebApplication1.Controllers
 
     public class BooksController : Controller
     {
-        private BooksRepository _booksRepository;
+        private IBooksRepository _booksRepository;
         private CategoriesRepository _categoriesRepository;
-        public BooksController(BooksRepository booksRepository,
+        public BooksController(IBooksRepository booksRepository,
                                 CategoriesRepository categoryRepository) {
             
             _categoriesRepository = categoryRepository;

@@ -1,4 +1,5 @@
-﻿using Common.Models;
+﻿using Common.Interfaces;
+using Common.Models;
 using DataAccess.Context;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class BooksRepository
+    public class BooksRepository: IBooksRepository
     {
         //field which represents an eventual object of type LibraryDbContext
         //reason is: we need to execute queries on that object

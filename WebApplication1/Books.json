@@ -1,0 +1,1 @@
+[{"Isbn":"1","Title":"Testing Json","Author":"Jason","Volume":1,"CategoryFK":1,"Category":null,"Description":"testing writing in a json file","Available":false,"Cover":"\\images\\1.jfif"}]
