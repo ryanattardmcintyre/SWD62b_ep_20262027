@@ -241,5 +241,18 @@ namespace WebApplication1.Controllers
         }
 
 
+        public IActionResult Download(string id, [FromServices] IWebHostEnvironment env)
+        {
+
+            string path = _booksRepository.GetBooks().SingleOrDefault(x => x.Isbn == id).Cover;
+            string absolutePath =env.WebRootPath + "\\" + path;
+            byte[] fileAsBytes = System.IO.File.ReadAllBytes(absolutePath);
+
+            //convert from base64 to bytes
+            return File(fileAsBytes, "application/pdf");
+            
+            
+        }
+
     }
 }

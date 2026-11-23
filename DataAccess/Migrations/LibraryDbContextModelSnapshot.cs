@@ -170,6 +170,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("DateTaken")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateToReturn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

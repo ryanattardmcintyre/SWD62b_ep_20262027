@@ -4,6 +4,7 @@ using DataAccess.Context;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.BookingPolicies;
 using WebApplication1.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +38,14 @@ else
 
     
 builder.Services.AddScoped<CategoriesRepository>();
+builder.Services.AddScoped<ReservationsRepository>();
+
+//note using keyedscoped instead of scoped, allows us to register two different
+//implementations under same interface BUT using a tag to distinguish
+builder.Services.AddKeyedScoped<IBookingPolicy, WinterBookingPolicy>("winter");
+builder.Services.AddKeyedScoped<IBookingPolicy, SummerBookingPolicy>("summer");
+
+
 
 
 var app = builder.Build();

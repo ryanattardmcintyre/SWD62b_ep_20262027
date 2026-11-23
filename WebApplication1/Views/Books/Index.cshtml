@@ -101,6 +101,9 @@
                         <a href="/Books/Details/@b.Isbn" class="btn btn-outline-warning">Details</a>
                         <a href="/Books/Edit/@b.Isbn" class="btn btn-outline-info">Edit</a>
                         <a href="/Books/Delete/@b.Isbn" onclick="return window.confirm('Are you sure?')" class="btn btn-danger">Delete</a>
+
+                        <a href="/Reservations/Create?bookId=@b.Isbn" class="btn btn-dark">Reserve this book</a>
+
                     </div>
                 </div>
             </div>

@@ -25,5 +25,7 @@ namespace Common.Models
         public DateTime DateTaken { get; set; }
         public DateTime? DateReturned { get; set; }
 
+        public DateTime DateToReturn { get; set; }
+
     }
 }
